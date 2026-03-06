@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Empire Builder</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b0b0b;
+  color: white;
+  text-align: center;
+}
+
+h1 { margin-top: 30px; }
+
+.stage-title {
+  font-size: 22px;
+  margin-top: 10px;
+}
+
+.options {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 220px;
+  background: #111;
+  border-radius: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.card:hover { transform: scale(1.05); }
+
+.card img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+}
+
+.card p {
+  margin: 0;
+  padding: 12px;
+  font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Build your Own Customized Empire</h1>
+<h2>Choose your Favourite</h2>
+<div class="stage-title" id="stageTitle"></div>
+<div class="options" id="options"></div>
+
+<script>
+const stages = [
+  { title: "King", names: ["Ashoka", "Akbar", "Shivaji"], prefix: "king" },
+  { title: "Advisors", names: ["Chanakya", "Birbal", "Ramdas"], prefix: "advisors" },
+  { title: "Town Layout", names: ["Dandaka", "Padmaka", "Sarvatobhadra"], prefix: "layout" },
+  { title: "Architecture Style", names: ["Dravidian", "Nagara", "Vesara"], prefix: "architecture" },
+  { title: "Famous Monuments", names: ["Great bath", "Citadel", "Dholavira water system"], prefix: "monument" },
+  { title: "Main Revenue Source", names: ["Agriculture", "Trade", "Taxation"], prefix: "revenue" },
+  { title: "Prominent Industry", names: ["Steel", "Textiles", "Shipbuilding"], prefix: "industry" },
+  { title: "River of Empire", names: ["Ganga", "Godavari", "Indus"], prefix: "river" },
+  { title: "Time Age", names: ["Bronze Age", "Iron Age", "Medieval Age"], prefix: "age" },
+  { title: "Law Book", names: ["Arthashastra", "Manusmriti", "Shukraniti"], prefix: "law" }
+];
+
+let currentStage = 0;
+const selections = {};
+
+const stageTitle = document.getElementById("stageTitle");
+const optionsDiv = document.getElementById("options");
+
+function renderStage() {
+  optionsDiv.innerHTML = "";
+
+  if (currentStage >= stages.length) {
+    showResult();
+    return;
+  }
+
+  const stage = stages[currentStage];
+  stageTitle.textContent = `Stage ${currentStage + 1}: ${stage.title}`;
+
+  stage.names.forEach((name, index) => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <img src="images/${stage.prefix}${index + 1}.jpg">
+      <p>${name}</p>
+    `;
+
+    card.onclick = () => {
+      selections[stage.title] = name;
+      currentStage++;
+      renderStage();
+    };
+
+    optionsDiv.appendChild(card);
+  });
+}
+
+function showResult() {
+  stageTitle.textContent = "Your Empire Summary";
+  optionsDiv.innerHTML = "";
+
+  for (const key in selections) {
+    const p = document.createElement("p");
+    p.style.fontSize = "20px";
+    p.style.margin = "10px";
+    p.textContent = `${key}: ${selections[key]}`;
+    optionsDiv.appendChild(p);
+  }
+}
+
+renderStage();
+</script>
+
+</body>
+</html>
